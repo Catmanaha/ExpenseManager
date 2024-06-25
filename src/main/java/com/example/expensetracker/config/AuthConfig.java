@@ -31,11 +31,11 @@ public class AuthConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize ->
                         authorize
+                                .requestMatchers("/sharedAccounts/**").hasAnyRole("USER", "ADMIN")
                                 .requestMatchers(HttpMethod.POST, "auth/*").permitAll()
                                 .requestMatchers("/accounts/*").hasAnyRole("USER", "ADMIN")
                                 .requestMatchers("/transactions/*").hasAnyRole("USER", "ADMIN")
                                 .requestMatchers("/categories/*").hasAnyRole("USER", "ADMIN")
-                                .requestMatchers("/sharedAccounts/*").hasAnyRole("USER", "ADMIN")
                                 .anyRequest()
                                 .authenticated())
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class).build();

@@ -4,19 +4,26 @@ import com.example.expensetracker.mapper.SharedAccountMapper;
 import com.example.expensetracker.model.dto.SharedAccountDto;
 import com.example.expensetracker.model.entity.Account;
 import com.example.expensetracker.model.entity.SharedAccount;
+import com.example.expensetracker.repository.AccountRepository;
 import com.example.expensetracker.repository.SharedAccountRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
 public class SharedAccountService {
     final SharedAccountRepository repository;
     final SharedAccountMapper mapper;
+    final AccountService service;
+    private final AccountRepository accountRepository;
 
-    public SharedAccountService(SharedAccountRepository repository, SharedAccountMapper mapper) {
+    public SharedAccountService(SharedAccountRepository repository, SharedAccountMapper mapper, AccountService service, AccountRepository accountRepository) {
         this.repository = repository;
         this.mapper = mapper;
+        this.service = service;
+        this.accountRepository = accountRepository;
     }
 
     public SharedAccount getById(UUID id) {
@@ -28,12 +35,12 @@ public class SharedAccountService {
         return sharedAccount;
     }
 
+    @Transactional
     public void addAccount(UUID accountId, UUID sharedAccountId) {
         repository.findById(sharedAccountId).ifPresent(sharedAccount -> {
-            Account account = new Account();
-            account.setId(accountId);
-            sharedAccount.getAccounts().add(account);
-            repository.save(sharedAccount);
+            accountRepository.findById(accountId).orElseThrow(
+                    () -> new RuntimeException("Account not found")
+            ).setSharedAccount(sharedAccount);
         });
     }
 
