@@ -46,17 +46,19 @@ public class SharedAccountService {
 
     public void removeAccount(UUID accountId, UUID sharedAccountId) {
         repository.findById(sharedAccountId).ifPresent(sharedAccount -> {
-            var accountToRemove = sharedAccount.getAccounts()
-                    .stream()
-                    .filter(account -> account.getId().equals(accountId))
-                    .map(s-> {s.setSharedAccount(null);return s;})
-                    .toList();
-
-                sharedAccount.getAccounts().removeAll(accountToRemove);
-                repository.save(sharedAccount);
-
+            List<Account> accounts = sharedAccount.getAccounts();
+            accounts.removeIf(account -> {
+                boolean shouldRemove = account.getId().equals(accountId);
+                if (shouldRemove) {
+                    account.setSharedAccount(null);
+                }
+                return shouldRemove;
+            });
+            sharedAccount.setAccounts(accounts);
+            repository.save(sharedAccount);
         });
     }
+
 
     public void create(SharedAccountDto dto) {
         repository.save(mapper.toSharedAccount(dto));
