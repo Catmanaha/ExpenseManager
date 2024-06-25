@@ -1,7 +1,7 @@
 package com.example.expensetracker.mapper;
 
-import com.example.expensetracker.dto.CategoryDto;
-import com.example.expensetracker.model.Category;
+import com.example.expensetracker.model.dto.CategoryDto;
+import com.example.expensetracker.model.entity.Category;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 

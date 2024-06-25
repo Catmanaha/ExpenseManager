@@ -1,7 +1,7 @@
 package com.example.expensetracker.mapper;
 
 import com.example.expensetracker.mapper.models.TransactionMapperModel;
-import com.example.expensetracker.model.Transaction;
+import com.example.expensetracker.model.entity.Transaction;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingTarget;
 

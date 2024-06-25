@@ -1,7 +1,7 @@
 package com.example.expensetracker.controller;
 
-import com.example.expensetracker.dto.AccountDto;
-import com.example.expensetracker.model.Account;
+import com.example.expensetracker.model.dto.AccountDto;
+import com.example.expensetracker.model.entity.Account;
 import com.example.expensetracker.service.AccountService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
