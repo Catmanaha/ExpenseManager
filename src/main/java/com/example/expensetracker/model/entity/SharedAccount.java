@@ -6,18 +6,14 @@ import lombok.Data;
 import java.util.List;
 import java.util.UUID;
 
-@Data
 @Entity
-public class Account {
+@Data
+public class SharedAccount {
     @Id
     @GeneratedValue
     private UUID id;
     private String name;
     private double balance;
-    @OneToMany(mappedBy = "account", cascade = CascadeType.ALL)
-    private List<Transaction> transactions;
-    @ManyToOne
-    private User user;
-    @ManyToOne
-    private SharedAccount sharedAccount;
+    @OneToMany(mappedBy = "sharedAccount", fetch = FetchType.EAGER)
+    private List<Account> accounts;
 }

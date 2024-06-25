@@ -30,8 +30,7 @@ public class AccountService {
 
     public void update(UUID id, AccountDto dto) {
         Account account = repository.findById(id).orElseThrow(RuntimeException::new);
-        User user = service.getByUserId(dto.userId());
-        AccountMapperModel mm = new AccountMapperModel(dto.name(), user);
+        AccountMapperModel mm = new AccountMapperModel(dto.name(), account.getUser());
         mapper.updateAccountFromMm(mm, account);
         repository.save(account);
     }

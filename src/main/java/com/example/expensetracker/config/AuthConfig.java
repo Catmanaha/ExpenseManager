@@ -32,9 +32,10 @@ public class AuthConfig {
                 .authorizeHttpRequests(authorize ->
                         authorize
                                 .requestMatchers(HttpMethod.POST, "auth/*").permitAll()
-                                .requestMatchers("/accounts/*").hasAnyRole()
-                                .requestMatchers("/transactions/*").hasAnyRole()
-                                .requestMatchers("/categories/*").hasAnyRole()
+                                .requestMatchers("/accounts/*").hasAnyRole("USER", "ADMIN")
+                                .requestMatchers("/transactions/*").hasAnyRole("USER", "ADMIN")
+                                .requestMatchers("/categories/*").hasAnyRole("USER", "ADMIN")
+                                .requestMatchers("/sharedAccounts/*").hasAnyRole("USER", "ADMIN")
                                 .anyRequest()
                                 .authenticated())
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class).build();
