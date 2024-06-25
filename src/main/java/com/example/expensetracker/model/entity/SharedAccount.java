@@ -1,5 +1,6 @@
 package com.example.expensetracker.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -20,6 +21,7 @@ public class SharedAccount {
     private double balance;
     @ToString.Exclude
     @JsonManagedReference
+    @JsonIgnore
     @OneToMany(mappedBy = "sharedAccount", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<Account> accounts;
 }
