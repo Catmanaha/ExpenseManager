@@ -1,6 +1,7 @@
 package com.example.expensetracker.controller;
 
 import com.example.expensetracker.model.dto.SharedAccountDto;
+import com.example.expensetracker.model.entity.SharedAccount;
 import com.example.expensetracker.service.SharedAccountService;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,11 +28,11 @@ public class SharedAccountController {
 
     @DeleteMapping("/{sharedAccountId}/{accountId}")
     public void removeAccount(@PathVariable UUID sharedAccountId, @PathVariable UUID accountId) {
-        service.addAccount(accountId, sharedAccountId);
+        service.removeAccount(accountId, sharedAccountId);
     }
 
     @GetMapping("/{id}")
-    public void getById(@PathVariable UUID id) {
-        service.getById(id);
+    public SharedAccount getById(@PathVariable UUID id) {
+        return service.getById(id);
     }
 }

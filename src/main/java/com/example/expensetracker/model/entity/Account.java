@@ -1,5 +1,6 @@
 package com.example.expensetracker.model.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -14,10 +15,11 @@ public class Account {
     private UUID id;
     private String name;
     private double balance;
-    @OneToMany(mappedBy = "account", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "account", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Transaction> transactions;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private User user;
-    @ManyToOne
+    @JsonBackReference
+    @ManyToOne(fetch = FetchType.LAZY)
     private SharedAccount sharedAccount;
 }
