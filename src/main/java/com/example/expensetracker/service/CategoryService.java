@@ -1,8 +1,8 @@
 package com.example.expensetracker.service;
 
-import com.example.expensetracker.dto.CategoryDto;
+import com.example.expensetracker.model.dto.CategoryDto;
 import com.example.expensetracker.mapper.CategoryMapper;
-import com.example.expensetracker.model.Category;
+import com.example.expensetracker.model.entity.Category;
 import com.example.expensetracker.repository.CategoryRepository;
 import org.springframework.stereotype.Service;
 

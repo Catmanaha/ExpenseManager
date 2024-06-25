@@ -1,6 +1,6 @@
 package com.example.expensetracker.mapper.models;
 
-import com.example.expensetracker.model.User;
+import com.example.expensetracker.model.entity.User;
 
 public record AccountMapperModel(String name,
                                  User user) {

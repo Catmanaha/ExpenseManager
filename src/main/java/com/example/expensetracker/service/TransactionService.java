@@ -1,11 +1,11 @@
 package com.example.expensetracker.service;
 
-import com.example.expensetracker.dto.TransactionDto;
+import com.example.expensetracker.model.dto.TransactionDto;
 import com.example.expensetracker.mapper.TransactionMapper;
 import com.example.expensetracker.mapper.models.TransactionMapperModel;
-import com.example.expensetracker.model.Account;
-import com.example.expensetracker.model.Category;
-import com.example.expensetracker.model.Transaction;
+import com.example.expensetracker.model.entity.Account;
+import com.example.expensetracker.model.entity.Category;
+import com.example.expensetracker.model.entity.Transaction;
 import com.example.expensetracker.model.enums.TransactionType;
 import com.example.expensetracker.repository.TransactionRepository;
 import org.springframework.stereotype.Service;

@@ -1,10 +1,10 @@
 package com.example.expensetracker.service;
 
-import com.example.expensetracker.dto.AccountDto;
+import com.example.expensetracker.model.dto.AccountDto;
 import com.example.expensetracker.mapper.AccountMapper;
 import com.example.expensetracker.mapper.models.AccountMapperModel;
-import com.example.expensetracker.model.Account;
-import com.example.expensetracker.model.User;
+import com.example.expensetracker.model.entity.Account;
+import com.example.expensetracker.model.entity.User;
 import com.example.expensetracker.repository.AccountRepository;
 import org.springframework.stereotype.Service;
 
@@ -23,14 +23,14 @@ public class AccountService {
     }
 
     public void create(AccountDto dto) {
-        User user = service.getUserById(dto.userId());
+        User user = service.getByUserId(dto.userId());
         AccountMapperModel mm = new AccountMapperModel(dto.name(), user);
         repository.save(mapper.toAccount(mm));
     }
 
     public void update(UUID id, AccountDto dto) {
         Account account = repository.findById(id).orElseThrow(RuntimeException::new);
-        User user = service.getUserById(dto.userId());
+        User user = service.getByUserId(dto.userId());
         AccountMapperModel mm = new AccountMapperModel(dto.name(), user);
         mapper.updateAccountFromMm(mm, account);
         repository.save(account);
