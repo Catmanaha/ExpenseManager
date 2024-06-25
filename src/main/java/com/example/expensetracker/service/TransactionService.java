@@ -8,6 +8,7 @@ import com.example.expensetracker.model.entity.Category;
 import com.example.expensetracker.model.entity.Transaction;
 import com.example.expensetracker.model.enums.TransactionType;
 import com.example.expensetracker.repository.TransactionRepository;
+import jakarta.validation.Valid;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;

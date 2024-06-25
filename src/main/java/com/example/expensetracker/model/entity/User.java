@@ -26,7 +26,7 @@ public class User implements UserDetails {
     private String name;
     private String email;
     private String password;
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH, CascadeType.DETACH})
     private List<Account> accounts;
     private UserRole role;
     @Enumerated(EnumType.STRING)
