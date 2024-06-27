@@ -4,6 +4,7 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
+import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.example.expensetracker.model.entity.User;
 import org.springframework.stereotype.Service;
 
@@ -35,6 +36,8 @@ public class TokenProvider {
                     .build()
                     .verify(token)
                     .getSubject();
+        } catch (TokenExpiredException exception) {
+            throw new TokenExpiredException("Token is expired", exception.getExpiredOn());
         } catch (JWTVerificationException exception) {
             throw new JWTVerificationException("Error while validating token", exception);
         }

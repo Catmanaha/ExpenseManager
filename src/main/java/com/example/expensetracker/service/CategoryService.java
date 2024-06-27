@@ -4,6 +4,7 @@ import com.example.expensetracker.model.dto.CategoryDto;
 import com.example.expensetracker.mapper.CategoryMapper;
 import com.example.expensetracker.model.entity.Category;
 import com.example.expensetracker.repository.CategoryRepository;
+import jakarta.persistence.LockModeType;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
