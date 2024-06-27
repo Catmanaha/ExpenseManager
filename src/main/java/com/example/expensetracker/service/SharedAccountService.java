@@ -37,11 +37,10 @@ public class SharedAccountService {
 
     @Transactional
     public void addAccount(UUID accountId, UUID sharedAccountId) {
-        repository.findById(sharedAccountId).ifPresent(sharedAccount -> {
-            accountRepository.findById(accountId).orElseThrow(
-                    () -> new RuntimeException("Account not found")
-            ).setSharedAccount(sharedAccount);
-        });
+        Account account = service.getById(accountId);
+        SharedAccount sharedAccount = repository.findById(sharedAccountId).orElseThrow(RuntimeException::new);
+        account.setSharedAccount(sharedAccount);
+        accountRepository.save(account);
     }
 
     public void removeAccount(UUID accountId, UUID sharedAccountId) {

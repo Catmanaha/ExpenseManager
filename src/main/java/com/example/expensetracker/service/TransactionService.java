@@ -9,6 +9,8 @@ import com.example.expensetracker.model.entity.Transaction;
 import com.example.expensetracker.model.enums.TransactionType;
 import com.example.expensetracker.repository.TransactionRepository;
 import jakarta.validation.Valid;
+import org.hibernate.dialect.lock.OptimisticEntityLockException;
+import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
@@ -31,16 +33,21 @@ public class TransactionService {
     }
 
     public void create(TransactionDto dto) {
-        Account account = accountService.getById(dto.accountId());
-        if (dto.type() == TransactionType.INCOME) {
-            account.setBalance(account.getBalance() + dto.amount());
-        } else if (dto.type() == TransactionType.EXPENSE) {
-            account.setBalance(account.getBalance() - dto.amount());
+        try {
+            Account account = accountService.getById(dto.accountId());
+            if (dto.type() == TransactionType.INCOME) {
+                account.setBalance(account.getBalance() + dto.amount());
+            } else if (dto.type() == TransactionType.EXPENSE) {
+                account.setBalance(account.getBalance() - dto.amount());
+            }
+            accountService.update(account);
+            Category category = categoryService.getById(dto.categoryId());
+            TransactionMapperModel mm = new TransactionMapperModel(dto.amount(), dto.type(), dto.description(), dto.dateOfTransaction(), category, account);
+            repository.save(mapper.toTransaction(mm));
+        } catch (OptimisticLockingFailureException ex) {
+            throw new OptimisticEntityLockException(null, "optimistic lock", ex);
         }
-        accountService.update(account);
-        Category category = categoryService.getById(dto.categoryId());
-        TransactionMapperModel mm = new TransactionMapperModel(dto.amount(), dto.type(), dto.description(), dto.dateOfTransaction(), category, account);
-        repository.save(mapper.toTransaction(mm));
+
     }
 
     public void update(UUID id, TransactionDto dto) {

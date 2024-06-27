@@ -12,7 +12,6 @@ import java.util.UUID;
 @Data
 @Entity
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
-
 public class Account {
     @Id
     @GeneratedValue
@@ -26,4 +25,6 @@ public class Account {
     @JsonBackReference
     @ManyToOne(fetch = FetchType.LAZY)
     private SharedAccount sharedAccount;
+    @Version
+    private int version;
 }
