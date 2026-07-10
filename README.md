@@ -59,8 +59,7 @@ test task with Java 17.
   category, and shared-account routes require the configured roles.
 - JWT signing material and database credentials are read from runtime
   configuration rather than source code.
-- A signing key and database password existed in earlier Git history. Rotate
-  any reused values; removing them from the current tree does not purge history.
+- Application secrets are supplied through runtime configuration and are not committed.
 
 ## Current limitations
 
