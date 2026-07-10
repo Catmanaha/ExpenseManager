@@ -35,3 +35,7 @@ out/
 
 ### VS Code ###
 .vscode/
+
+# Local runtime configuration can contain credentials and signing keys.
+.env
+!.env.example

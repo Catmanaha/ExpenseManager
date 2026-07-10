@@ -6,7 +6,7 @@ import com.example.expensetracker.model.entity.User;
 import com.example.expensetracker.repository.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
@@ -15,9 +15,11 @@ import java.util.UUID;
 public class AuthService implements UserDetailsService {
     final
     UserRepository repository;
+    private final PasswordEncoder passwordEncoder;
 
-    public AuthService(UserRepository repository) {
+    public AuthService(UserRepository repository, PasswordEncoder passwordEncoder) {
         this.repository = repository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     public User getByUserId(UUID id) {
@@ -33,7 +35,7 @@ public class AuthService implements UserDetailsService {
         repository.findByEmail(data.email()).ifPresent(user -> {
             throw new JWTVerificationException("Username already exists");
         });
-        String encryptedPassword = new BCryptPasswordEncoder().encode(data.password());
+        String encryptedPassword = passwordEncoder.encode(data.password());
         User newUser = new User(data.name(), data.email(), encryptedPassword, data.role());
         return repository.save(newUser);
     }

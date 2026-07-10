@@ -6,19 +6,34 @@ import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.exceptions.TokenExpiredException;
 import com.example.expensetracker.model.entity.User;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.time.Duration;
 import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
 
 @Service
 public class TokenProvider {
-    private String JWT_SECRET = "OLD_JWT_SECRET";
+    private final String jwtSecret;
+    private final Duration accessTokenLifetime;
+
+    public TokenProvider(
+            @Value("${security.jwt.secret}") String jwtSecret,
+            @Value("${security.jwt.access-token-lifetime:PT2H}") Duration accessTokenLifetime
+    ) {
+        if (jwtSecret == null || jwtSecret.length() < 32) {
+            throw new IllegalArgumentException(
+                    "security.jwt.secret must contain at least 32 characters"
+            );
+        }
+
+        this.jwtSecret = jwtSecret;
+        this.accessTokenLifetime = accessTokenLifetime;
+    }
 
     public String generateAccessToken(User user) {
         try {
-            Algorithm algorithm = Algorithm.HMAC256(JWT_SECRET);
+            Algorithm algorithm = Algorithm.HMAC256(jwtSecret);
             return JWT.create()
                     .withSubject(user.getUsername())
                     .withClaim("username", user.getUsername())
@@ -31,7 +46,7 @@ public class TokenProvider {
 
     public String validateToken(String token) {
         try {
-            Algorithm algorithm = Algorithm.HMAC256(JWT_SECRET);
+            Algorithm algorithm = Algorithm.HMAC256(jwtSecret);
             return JWT.require(algorithm)
                     .build()
                     .verify(token)
@@ -44,6 +59,6 @@ public class TokenProvider {
     }
 
     private Instant genAccessExpirationDate() {
-        return LocalDateTime.now().plusHours(2).toInstant(ZoneOffset.of("-04:00"));
+        return Instant.now().plus(accessTokenLifetime);
     }
 }
