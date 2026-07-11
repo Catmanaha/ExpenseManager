@@ -1,13 +1,14 @@
 # ExpenseManager
 
-ExpenseManager is a Spring Boot REST API for users, accounts, shared accounts,
-categories, and transactions. It demonstrates JWT authentication, BCrypt
-password hashing, JPA persistence, and optimistic locking on account updates.
+ExpenseManager is a Spring Boot REST API I built to practise the backend of an expense tracking application. It handles users, accounts, shared accounts, categories, and transactions. The project does not connect to banks or process real payments.
 
-This is a learning backend, not a deployed finance product. It does not process
-payments, connect to banks, or contain real financial data.
+## Main functionality
 
-## Architecture
+- JWT authentication with signed access tokens.
+- BCrypt password hashing through Spring Security.
+- Role checks on account, transaction, category, and shared-account routes.
+- SQL Server persistence with Spring Data JPA.
+- Optimistic locking on account updates to catch conflicting writes.
 
 ```text
 REST controllers
@@ -19,53 +20,47 @@ Spring services ----> JPA repositories ----> SQL Server
 JWT security filter and Spring Security
 ```
 
-Authentication endpoints issue signed access tokens. Other routes pass through
-the JWT filter and Spring Security role checks. Passwords are encoded with the
-configured BCrypt `PasswordEncoder`. Account entities use JPA optimistic
-locking to detect conflicting writes rather than silently overwriting them.
-
-## Requirements
+## Stack
 
 - Java 17
+- Spring Boot 3.3
+- Spring Security
+- Spring Data JPA
 - SQL Server
+- Gradle
 
-## Configuration
+## Run locally
 
-Copy `.env.example` values into your local environment or IDE run
-configuration. Do not commit a populated `.env` file.
+Create a SQL Server database, then copy the values from `.env.example` into your environment or IDE run configuration. The main settings are:
 
-Required secrets:
-
+- `DATABASE_URL`
+- `DATABASE_USERNAME`
 - `DATABASE_PASSWORD`
-- `JWT_SECRET`, containing at least 32 randomly generated characters
+- `JWT_SECRET`, with at least 32 random characters
+- `JWT_ACCESS_TOKEN_LIFETIME`
 
-The application deliberately fails during startup if the signing secret is
-missing or too short.
+The application stops during startup if the JWT secret is missing or too short.
 
-## Build and test
+Run it with:
+
+```powershell
+.\gradlew.bat bootRun --no-daemon
+```
+
+Do not commit a populated `.env` file.
+
+## Tests and build
 
 ```powershell
 .\gradlew.bat test --no-daemon
 .\gradlew.bat bootJar --no-daemon
 ```
 
-Tests exercise JWT generation, validation, tamper detection, and signing-key
-validation without requiring a database. GitHub Actions runs the same Gradle
-test task with Java 17.
+The current tests cover JWT generation, validation, tamper detection, and signing-key validation without needing a database. GitHub Actions runs the Gradle test task with Java 17.
 
-## Security notes
+## Still to do
 
-- Authentication routes are limited to `POST /auth/**`; account, transaction,
-  category, and shared-account routes require the configured roles.
-- JWT signing material and database credentials are read from runtime
-  configuration rather than source code.
-- Application secrets are supplied through runtime configuration and are not committed.
-
-## Current limitations
-
-- There are no database integration or controller authorization tests yet.
-- Database schema lifecycle still relies on Hibernate configuration rather than
-  a committed migration tool.
-- Several service methods use generic runtime exceptions and need a consistent
-  API error model.
-- Token revocation and refresh tokens are not implemented.
+- Add database integration and controller authorization tests.
+- Add a migration tool instead of relying on Hibernate for schema setup.
+- Replace generic runtime exceptions with a consistent API error model.
+- Add refresh tokens and token revocation.
